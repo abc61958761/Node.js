@@ -127,6 +127,23 @@ app.get('/hey/:id', function(req, res){
   res.send(req.params.id + ' ' + JSON.stringify(req.query));
 });
 ```
+
+***
+## Express 提供靜態資料
+如果要提供影像、CSS 檔案和 javaScript 檔案等之類的靜態檔案，請使用 Express 中的 express.static 內建中介軟體函數
+
+將含有靜態資產的目錄名稱傳遞給 express.static 中介軟體函數，就能直接開始提供檔案
+```javascript
+app.use(express.static('public'));
+```
+
+如果要為express.static 函數所提供的檔案，建立虛擬路徑字首(其中路徑事實上不存在於檔案系統中)，請為靜態目錄指定裝在路徑
+```javascript
+app.use('/public', express.static('public'));
+//保守做法是使用絕對路徑
+app.use('/public', express.static(__dirname + 'public'));
+```
+
 ***
 ## 使用Express,ejs 讀取靜態資料JSON
 
