@@ -41,10 +41,9 @@ app.listen(3000);//告訴server聽取3000這個Port
 ```
 
 ***
-## 自訂路由(Routing)-接收請求(Get Request)與回傳回應(Send Response)
+## 自訂路由(Routing)
 
-Express Get Request
-
+### Express Get Request
 ```javascript
 app.get('/', function(req, res){
   res.send('Exprtee is excellent!!!');//接收連線請求 並回應客戶端
@@ -56,6 +55,16 @@ app.get('/', function(req, res){
 ```javascript
 app.get('/', function(req, res){
   res.send('<h1>Exprtee is excellent!!!<h1>');
+});
+```
+
+### app.all
+app.all() 是一個特殊的路由方法，它不是衍生自任何Http方法。此方法用來在所有要求方法的路徑中載入中介軟體函數。不論你使用 GET、POST、PUT、DELETE
+或 http 模組中支援的其他任何 HTTP 要求方法
+
+```javascript
+app.all('/secret', function(req, res, next){
+   console.log("Accessing the secret section");
 });
 ```
 
@@ -129,6 +138,22 @@ app.get('/hey/:id', function(req, res){
 ```
 
 ***
+## 頁面呈現
+### res.render
+Express 可以透過 res.render 呈現 .ejs, .jade 頁面
+```javascript
+app.get('/', function(req, res){
+   res.render('index.ejs');
+});
+```
+### res.sendfile
+Express 透過 res.sendfile 呈現 .html 頁面
+```javascript
+app.get('/', function(req, res){
+   res.sendfile(__dirname + '/views/index.html'); // 給定絕對路徑
+});
+```
+***
 ## Express 提供靜態資料
 如果要提供影像、CSS 檔案和 javaScript 檔案等之類的靜態檔案，請使用 Express 中的 express.static 內建中介軟體函數
 
@@ -142,6 +167,12 @@ app.use(express.static('public'));
 app.use('/public', express.static('public'));
 //保守做法是使用絕對路徑
 app.use('/public', express.static(__dirname + 'public'));
+```
+
+### 使用Express 載入css
+除了提供css靜態資料外，還必須在 ejs 中加入 link
+```html
+<link rel="styleheets" href="/public/styleheets/style.css" >
 ```
 
 ***
