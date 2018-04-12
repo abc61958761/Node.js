@@ -182,7 +182,7 @@ app.get('/', function(req, res){
       <h3> <a href="/api/posts"></a></h3>
       <% posts.forEach(function(post) { %>
          <h3>
-            <a href="/post/<%= post.id %>'>
+            <a href="/post/<%= post.id %>">
                <%= post.title %>
             </a>
          </h3>
