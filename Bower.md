@@ -18,4 +18,14 @@ $bower install [package name 例如 jquery,bootstrap]
 安裝後會看到  
 bower_components/jquery/*、bower_components/bootstrap/*
 
+透過 bower init 安裝 bower.json，可以在dependencies的部分輸入套件名稱與版本號
 
+在建立好的 express 框架下的 app.js ，把剛才建立好的套件資料夾綁入基本靜態套件路徑。
+```javascript
+app.use('/bower_components', express.static('bower_components'));
+```
+
+接著使用 script tag 將檔案引入
+```html
+<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+```
