@@ -43,12 +43,21 @@ app.listen(3000);//告訴server聽取3000這個Port
 ***
 ## 自訂路由(Routing)
 
-### Express Get Request
+### 路由方法
+路由方法衍生自其中一個 http 方法，並且會附加到 express 類別實例中。
+下列程式碼範例說明對應用程式根目錄提出 GET 與 POST 方法時所定義的路由
 ```javascript
+// GET method route
 app.get('/', function(req, res){
   res.send('Exprtee is excellent!!!');//接收連線請求 並回應客戶端
 });
+
+// POST method route
+app.post('/', function (req, res) {
+  res.send('POST request to the homepage');
+});
 ```
+Express 支援下列的路由方法，這些方法對應至 HTTP 方法：get、 post、put、head、delete、options、 trace、copy、lock、mkcol、move、purge、propfind、proppatch、unlock、report、mkactivity、checkout、merge、m-search、notify、subscribe、unsubscribe、patch、search，以及 connect。
 
 在'Exprtee is excellent!!!'這個字串上加上```<h1>```Tag
 
