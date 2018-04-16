@@ -76,5 +76,5 @@ socket.on('chat message', function(msg){
 });
 ```
 
-**'chat message'是自定義的有對應關係**
+> **'chat message'是自定義的有對應關係**
 
