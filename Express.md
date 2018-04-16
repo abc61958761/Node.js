@@ -118,7 +118,7 @@ req.params 會將命名過參數以 key-value 的形式存放;比如這邊舉例
 
 ```javascript
 app.get('/post/:name/:nickname', function(req, res){
-  res.send(req.param.name + is so + req.param.nickname);
+  res.send(req.param.name + 'is so' + req.param.nickname);
 });
 ```
 
