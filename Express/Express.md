@@ -248,3 +248,36 @@ app.get('/', function(req, res){
    </div>
 </main>
 ```
+
+## 建立資料庫連線 mysql
+
+首先專案必須要先 install mysql
+```
+npm install mysql
+```
+
+宣告一個 mysql 連線，使用 createConnection 方法將資料庫參數初始化
+```javascript
+var mysql = require('mysql');
+var conn = mysql.createConnection({
+   host: 'localhost',
+   user: 'root',
+   password: '0000',
+   database: 'test',
+   port: 3306
+});
+```
+
+透過 qery 執行，測試連線是否成功
+```javascript
+conn.query('SELECT 12+34 AS result', function(err, rows, field){
+   if(err) throw err;
+   console.log('The is result', row[0].result);
+});
+```
+**如有成功印出 46 代表連線已成功**
+
+
+
+
+
