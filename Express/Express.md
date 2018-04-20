@@ -249,8 +249,9 @@ app.get('/', function(req, res){
 </main>
 ```
 
-## 建立資料庫連線 mysql
+## Express 資料庫操作
 
+### 建立連線 mySQL
 首先專案必須要先 install mysql
 ```
 npm install mysql
@@ -276,6 +277,98 @@ conn.query('SELECT 12+34 AS result', function(err, rows, field){
 });
 ```
 **如有成功印出 46 代表連線已成功**
+
+***
+### 資料庫操作 查詢(Read)
+```javascript
+var mysql = require('mysql');
+var db_option = {
+   host: 'localhost',
+   user: 'root',
+   password: '0000',
+   database: 'test',
+   port: 3306
+};
+var sqlread = function(req, res){
+   var conn = mysql.createConnection(db_option);
+   var query = 'SELECT * FORM user';
+   conn.query(query, function(err, rows, fields){//row取得sql資料
+      if(err) throw err;
+      res.render('index', {'items': rows})//將資料傳遞至前端
+   });
+}; 
+```
+
+***
+### 資料庫操作 建立(Create)
+在 express 4.x 將 body parser 分離了，想取得使用者輸入的資料專案必須要安裝 body-parser  
+body-parser 作用是對於 post 請求的請求體進行解析
+```
+npm install body-parser
+```
+
+bodyParser 實現要點如下
+1. 處理不同類型的請求體: 例如 text、json、urlencode等
+2. 處理不同的編碼: 例如 utf8、gbk
+3. 處理不同的壓縮類型: 例如 gzip、deflare
+4. 其他邊界、異常處理
+   
+bodyParser提供了以下幾種方法
+1. bodyParser.json();
+2. bodyParser.raw();
+3. bodyParser.text();
+4. bodyParser.urlencoded();
+
+```javascript
+var express = require('express');
+var app = express();
+var body = require('body-parser');
+var mysql = require('mysql');
+var db_option = {
+   host: 'localhost',
+   user: 'root',
+   password: '0000',
+   database: 'test',
+   port: 3306
+}
+
+var pool = mysql.createPool(db_option);
+
+app.use(body.urlencode);//處理 post 請求,初始化req.body
+
+var createPost = funtcion(req, res){
+   pool.getConnection(function(err, conn){
+      conn.query('INSERT INTO user SET ?',{//將使用者輸入資料，新增到資料庫
+            name: req.body.name,
+            age: req.body.age,
+            sex: req.body.sex
+        },function(err, fields){
+            if(err) throw err;
+        });
+
+        conn.query('SELECT * FROM user',function(err, rows, field){//重新sql資料更新頁面
+            if(err) throw err;
+            res.render('index.jade', {title: '使用者介面', 'items': rows});
+        });
+        
+        conn.release();
+    });
+};
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
