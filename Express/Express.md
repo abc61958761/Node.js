@@ -356,6 +356,41 @@ var createPost = funtcion(req, res){
 };
 ```
 
+***
+### 資料庫操作 更新(Update)
+```javascript
+pool.getConnection(function(err, conn){
+   conn.query('UPDATE user SET ? WHERE name=?',[{
+      name: req.body.name,
+      age: req.body.age,
+      sex: req.body.sex
+   },req.body.name], function(err, conn){
+      if(err) throw err;
+   });
+   conn.query('SELECT * FROM user',function(err, rows, field){
+      if(err) throw err;
+         res.render('index.jade', {title: '使用者介面', 'items': rows});
+   });
+
+   conn.release();
+});
+```
+
+***
+### 資料庫操作 刪除(Delete)
+```javascript
+pool.getConnection(function (err, conn) {
+   conn.query('DELETE FROM user WHERE id=?',[req.params.id],
+      function(err, row, fields){
+         if(err) throw err;
+      });
+   conn.query('SELECT * from user', function(err, rows, field){
+      if(err) throw err;
+         res.render('index.jade', {title: '使用者介面', 'items': rows});
+      });
+   conn.release();
+});
+```
 
 
 
