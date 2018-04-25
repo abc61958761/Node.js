@@ -332,7 +332,98 @@ var vm = new Vue({
 });
 ```
 
+5. 物件+陣列 的混合寫法
+```html
+<div id="app">
+    <ul class="menulist">
+        <li><a href="#" :class="[{ active: isActive }, errorClass]">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Work</a></li>
+        <li><a href="#">Contact</a></li>
+    </ul>
+</div>
+```
+```javascript
+var vm = new Vue({
+    el: '#app',
+    data: {
+        isActive: true,
+        errorClass: 'hasError'
+    }
+});
+```
+#### 綁定多個 Style 屬性(inline-style)
+1. 物件 object 寫法
+```html
+<div id="app">
+    <ul class="menulist">
+        <li><a href="#" :style="{ color: anotherColor, fontSize: fontSize + 'px' }">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Work</a></li>
+        <li><a href="#">Contact</a></li>
+    </ul>
+</div>
+```
+```javascript
+var vm = new Vue({
+    el: '#app',
+    data: {
+        anotherColor: '#ff0000',
+        fontSize: '20'
+    }
+});
+```
+2. 物件 object 寫法(集合)
+```html
+<div id="app">
+    <ul class="menulist">
+        <li><a href="#" :style="{styleObject}">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Work</a></li>
+        <li><a href="#">Contact</a></li>
+    </ul>
+</div>
+```
+```javascript
+var vm = new Vue({
+    el: '#app',
+    data: {
+        styleObject: {
+            color: '#ff0000',
+            fontSize: '20px'
+        }
+    }
+});
+```
+3. 陣列 array 寫法
+```html
+<div id="app">
+    <ul class="menulist">
+        <li><a href="#" :style="[colorStyle, fontSizeStyle]">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Work</a></li>
+        <li><a href="#">Contact</a></li>
+    </ul>
+</div>
+```
+```javascript
+var vm = new Vue({
+    el: '#app',
+    data: {
+        colorStyle: { 'color': '#ff0000' },
+        fontSizeStyle: { 'fontSize': '20px' }
+    }
+});
+```
+最後，只要我們設定一些指令，Vue的資料與畫面就會同步，同步的概念有以下兩種：
 
+第一種：data改變，UI內容跟著更新。
+第二種：使用者在UI輸入內容，data跟著更新。
+
+同樣都是綁定，我們來比較一下v-model跟v-bind的差異：
+
+```v-model```：雙向綁定資料(第一種&第二種)，只能在HTML表單元素和自訂元件上使用。  
+```v-bind```：單向綁定(第一種)HTML元素的屬性。
 
 
 
