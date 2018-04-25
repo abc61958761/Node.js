@@ -484,6 +484,130 @@ Vue 為什麼要特別讓 v-bind 也可以接受 object 或 array 的值呢？
 
 #### 綁定多個Class屬性
 1. 物件 object 寫法：
+```html
+<div id="app">
+    <ul class="menulist">
+        <li><a href="#" :class="{ active: isActive, hasError: isError }">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Work</a></li>
+        <li><a href="#">Contact</a></li>
+    </ul>
+</div>
+```
+```javascript
+var vm = new Vue({
+    el: '#app',
+    data: {
+        isActive: true,
+        isError: true
+    }
+});
+```
+
+2. 物件 object 寫法(集合)
+```html
+<div id="app">
+    <ul class="menulist">
+        <li><a href="#" :class="classObject">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Work</a></li>
+        <li><a href="#">Contact</a></li>
+    </ul>
+</div>
+```
+```javascript
+var vm = new Vue({
+    el: '#app',
+    data: {
+        classObject: {
+          active: true,
+          hasError: true
+        }
+    }
+});
+```
+使用```computed```計算屬性來自動計算：
+> ```computed```會在後面有一篇詳細介紹，這邊先看一下寫法。
+
+```javascript
+var vm = new Vue({
+    el: '#app',
+    data: {
+        isActive: true,
+        isError: true
+    },
+    computed: {
+        return {
+            active: isActive,
+            hasError: isError
+        }
+    }
+});
+```
+
+3. 陣列 array 寫法
+```html
+<div id="app">
+    <ul class="menulist">
+        <li><a href="#" :class="[activeClass, errorClass]">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Work</a></li>
+        <li><a href="#">Contact</a></li>
+    </ul>
+</div>
+```
+```javascript
+var vm = new Vue({
+    el: '#app',
+    data: {
+        activeClass: 'active',
+        errorClass: 'hasError'
+    }
+});
+```
+4. 加上判斷的三元運算式
+```html
+<div id="app">
+    <ul class="menulist">
+        <li><a href="#" :class="[isActive ? activeClass : '', errorClass]">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Work</a></li>
+        <li><a href="#">Contact</a></li>
+    </ul>
+</div>
+```
+```javascript
+var vm = new Vue({
+    el: '#app',
+    data: {
+        isActive: true,
+        activeClass: 'active',
+        errorClass: 'hasError'
+    }
+});
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
