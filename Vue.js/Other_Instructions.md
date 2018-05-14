@@ -1,3 +1,207 @@
 # 其他指令
 以下介紹這三個指令皆不需要表達式。
 
+***v-pre***
+用途：會在編譯過程時忽略該元素。
+用法：
+
+```html
+<div id="app">
+  <p>{{ message }}</p>
+  <p v-pre>{{ message }}</p>
+</div>
+```
+```javascript
+export default {
+  data () {
+    message: 'Hello'
+  }
+}
+```
+
+***v-cloak***
+用途：這個指令會在編譯過程中一直保持在元素上，直到實體編譯結束，此功能可搭配css的display屬性，這樣就可以隱藏編譯前的內容了。
+用法：
+
+```html
+<div id="app" v-cloak>
+  {{ message }}
+</div>
+```
+```css
+//style
+[v-cloak] {
+    display: none;
+}
+```
+
+***v-once***
+用途：只會渲染元素一次，之後的重新渲染，元素或其子元素將被視為靜態內容，如果此元素不需要重複建立，可以達到優化效能的效果。
+用法：
+
+```html
+<div id="app">
+  <!-- 單個元素 -->
+  <span v-once>{{ message }}</span>
+
+  <!-- 含子元素 -->
+  <div v-once>
+    <h1>Title</h1>
+    <p>{{ message }}</p>
+  </div>
+
+  <!-- 元件 -->
+  <my-component v-once :comment="message"></my-component>
+
+  <!-- 跟v-for一起使用 -->
+  <ul>
+    <li v-for="i in list" v-once>{{ i }}</li>
+  </ul>
+</div>
+```
+
+# filter(過濾器)
+Vue提供的```filters```可以讓你自定義過濾器，到了版本2.x，```filters```最主要的功能是將文字資料格式化，
+我們可以在```filters```中放入自己寫好的```function```，像是全部英文字母轉大寫、價錢數值的格式化等等。
+
+filters的使用方法分為兩種：
+1. mustache模板插值(mustache interpolations)
+```
+{{ message | filterA }}
+```
+
+2. v-bind表達式(v-bind expressions)
+```html 
+<div v-bind:id="message | fliterA"></div>
+```
+
+filters的種類分為本地過濾器(local filter)與全局過濾器(global filter)：
+
+1. 本地過濾器(local filter)
+```html
+<div id="app">
+  <span>{{ text | toUpperCase }}</span>
+</div>
+```
+```javascript
+export default {
+  data () {
+    text: 'hello vue'
+  },
+  filter: {
+    toUpperCase(value) {
+      return value.toUpperCase();
+    }
+  }
+}
+```
+
+2. 全局過濾器(global filter)
+用filters將資料的第一個字變成大寫，順便練習前面使用過的v-model。
+
+```html
+<div id="app">
+  <input type="text" model="mytext"></input>
+  <span>{{ mytext | capitalize }}</span>
+</div>
+```
+```javascript
+Vue.filter('capitalize', function(){
+  return value.charAt(0).toUpperCase() + value.slice(1);
+})
+
+export default {
+  data () {
+    mytext: 'hello'
+  }
+}
+```
+
+### ```filters```可以用|串聯：
+```
+{{ message | filterA | filterB }}
+```
+
+### ```filter```是JavaScript函數，所以可以傳入參數：
+```
+{{ message | filterA('arg1', 'arg2') }}
+```
+
+# computed(計算屬性)
+假設我們把程式邏輯寫在View中...
+```html
+<div id="app">
+  <p>原始訊息：{{ message }}</p>
+  <p>反轉訊息：{{ message.split('').reverse().join('') }}</p>
+</div>
+```
+
+這還只是將文字倒轉的功能寫在View當中，當邏輯一多一複雜下去，模板裡就會寫很多function，
+如此一來就違反讓View專注在顯示資料的規則，變得很不簡潔。
+
+這個```computed```的功能很強大，可以對資料做處理計算，而且它有cache，能避免重複處理資料，跟```filters```一樣，
+也是在```computed```裡放入```function```，不同的是，```computed```可以做比較複雜的資料處理，資料處理完之後就將資料回傳。
+
+
+範例1：將文字倒轉過來
+```html
+<div id="app">
+  <p>原始訊息：{{ message }}</p>
+  <p>反轉訊息：{{ reverseMessage }}</p>
+</div>
+```
+```javascript
+export default {
+  name: 'HelloWorld',
+  data () {
+    return {
+      message: 'Welcome to Your Vue.js App'
+    }
+  },
+  computed: {
+    reverseMessage () {
+      return this.message.split('').reverse().join()
+    }
+  }
+}
+```
+
+範例2：使用computed做文章摘要
+當我們做網頁，想把一段文字縮短成幾個字，後面部分以...代替，也可以使用computed來做。
+```html
+<div id="app">
+  <p>原始內容：{{ content }}</p>
+  <p>文章摘要：{{ summary }}</p>
+</div>
+```
+```javascript
+export default {
+  name: 'HelloWorld',
+  data () {
+    return {
+      message: '`computed`的功能很強大，它可以對資料做處理，而且它有cache，可以避免重複處理資料，跟`filters`一樣，可以在`computed`裡放入`function`，不同的是，`computed`可以做比較複雜的資料處理。'
+    }
+  },
+  computed: {
+    summary() {
+      if (this.content.length > 30)
+        return this.content.slice(0, 27) + '...';
+      return this.content;
+    }
+  }
+}
+```
+
+### filters vs computed
+* filters適合做簡單的文字格式處理。
+* computed可用於做較複雜的邏輯運算處理。
+
+### computed vs methods
+|比較|computed|methods|
+|---|---|---|
+|特徵|computed會依賴屬性data中的資料，前面提到computed有cache，computed執行完的運算結果會暫存到cache，所以如果相依的資料不變，就不會重新計算，直接從cache回傳暫存資料。|methods只要重新渲染元素呼叫到函式，就會重新計算一次。|
+|回傳資料時機|從data取得資料並處理完後直接回傳給View顯示。|需在View呼叫函式才會執行。|
+|適用時機|因為會暫存結果，所以適用運算結果資料不會改變時，效能也會比較好。|需要每次更新且不要暫存結果，適合狀態的改變。|
+
+
+
