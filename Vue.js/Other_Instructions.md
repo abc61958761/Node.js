@@ -204,4 +204,74 @@ export default {
 |適用時機|因為會暫存結果，所以適用運算結果資料不會改變時，效能也會比較好。|需要每次更新且不要暫存結果，適合狀態的改變。|
 
 
+# watch(監聽器)
+用途：監聽某個data值(變數)，當這個值變動時，就會去做對應的事情(函數)。
+用法：
+```html
+<div id="app">
+  <p>g(公克)：<input type="text" v-model="g"></p>
+  <p>kg(公斤)：<input type="text" v-model="kg"></p>
+  <p>t(公噸)：<input type="text" v-model="t"></p>
+</div>
+```
+```javascript
+export default {
+  name: 'HelloWorld',
+  data () {
+    return {
+      g: 0,
+      kg: 0,
+      t: 0
+    }
+  },
+  watch: {
+    g: function(value) {
+      this.g = value;
+      this.kg = value / 1000;
+      this.t = value / 1000 / 1000;
+    },
+    kg: function(value) {
+      this.g = value * 1000;
+      this.kg = value;
+      this.t = value / 1000;
+    },
+    t: function(value) {
+      this.g = value * 1000 * 1000;
+      this.kg = value * 1000;
+      this.t = value;
+    }
+  }
+}
+```
+
+### watch vs computed
+
+watch
+* 觀察特定的值
+* 適用時機在資料值一直會有變化的時候
+* 得到最後結果前，可以設置中間狀態
+
+computed
+* 解決模板(View)上程式邏輯過多的問題
+* 暫存運算結果
+* 可以更高效解決問題
+
+以上就是Vue的```watch```的用途與用法，```watch```雖然好用，但如果function太多，
+資料關聯也愈複雜的話，或許就可以考慮用```computed```寫寫看了。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
