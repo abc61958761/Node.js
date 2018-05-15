@@ -50,10 +50,10 @@ vue init webpack my-project
 6. 測試檔案一律已測試目的檔案名稱 .spec.js 命名
 7. 資源檔一律以小寫字元命名，有兩個以上的片語以"-"進行分割
 
-# Vue 專案的 webpack 設定與基本用法
+# 2.3 Vue 專案的 webpack 設定與基本用法
 webpack 是一個模組包裝工具，它的作用是把互相依賴的模組處理成靜態資源。
 
-webpack 的特點
+## webpack 的特點
 
 - 程式分割：  
 在 webpack 的依賴樹裡有兩種依賴，同步依賴和非同步依賴。非同步依賴會成為一個程式分割點，並組成一個新的程式區塊。
@@ -81,6 +81,38 @@ require("./components/" + name + ".vue")
 webpack 有豐富的外掛程式系統，大多數內部的功能都是以這個外掛程式系統為基礎的。這也使我們可以訂製 webpack，把它打造成能滿足我們需求的工具，
 並且把自己做的外掛程式開放原始碼出去。
 
+## 用別名取代路徑參考
+
+使用 require 有時需要參考一段很長的檔案路徑，透過 webpack 的 resolve 設定項目來解決。
+在 webpack.base.config.js 中加入以下這個別名的定義：
+```
+module.exports = {
+  entry: {...},
+  output: {...},
+  module: {...},
+  resolve: {
+    extensions: ['','js'],
+    alias: {
+      'bs-select': 'bower_components/bootstrap-select/dist/js/select.js'
+    }
+  }
+}
+```
+這麼定義之後在使用 import 時就可以改為以下寫法
+```
+import Select from 'bs-select'
+```
+
+# 2.4 基於 Karma + Phantom + Mocha + Sinon + Chai 的單元測試環境
+
+在有實際元件測試目標時的 Vue-TDD 的開發流程
+- 撰寫元件測試：在單元測試中將設計元件的名稱、屬性介面、事件介面，用斷言工具確定衡量這個元件正確的標準
+- 撰寫元件程式：以單元測試作為啟動程式，撰寫元件真實的現實程式，讓測試成功。
+- 執行測試
+- 重構
+
+## [Karma](https://karma-runner.github.io/)
+測試載入器，他能完成許多測試環境載入工作
 
 
 
